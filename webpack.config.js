@@ -8,7 +8,8 @@ module.exports = {
     context: path.resolve("./src"),
     entry: {
         "vendor": [ "jquery", "three" ],
-        "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ]
+        "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ],
+        "simple-cube": [ "./examples/simple-cube/index.js", "./examples/simple-cube/res/index.less" ]
     },
     resolve: {
         alias: {

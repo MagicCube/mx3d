@@ -83,7 +83,7 @@ export default class Scene
                 this.camera.rotation.copy(rotation);
             }
         }
-        this.addObject(this.camera);
+        this.add(this.camera);
     }
 
     initRenderer()
@@ -134,12 +134,12 @@ export default class Scene
 
 
 
-    addObject(obj)
+    add(obj)
     {
         this.root.add(obj);
     }
 
-    removeObject(obj)
+    remove(obj)
     {
        this.root.remove(obj);
     }
@@ -152,13 +152,8 @@ export default class Scene
         {
             let helper = null;
             helper = new helperClass(light);
-            this.addObject(helper);
+            this.add(helper);
         }
-    }
-
-    removeLight(light)
-    {
-        this.removeObject(light);
     }
 
     render()
