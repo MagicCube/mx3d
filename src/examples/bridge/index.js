@@ -6,7 +6,7 @@ $(() => {
     });
 
     window.onresize = () => {
-        scene.updateFrame();
+        scene.invalidateSize();
     };
 
     scene.startAnimation();

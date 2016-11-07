@@ -43,10 +43,12 @@ export default class AnimatedScene extends Scene
 
 
 
-    update()
+    update(time)
     {
         this.updateCameraControls();
-        super.update();
+        TWEEN.update(time);
+
+        super.update(time);
     }
 
     updateCameraControls()
@@ -72,15 +74,201 @@ export default class AnimatedScene extends Scene
         }
     }
 
-    renderLoop()
+    renderLoop(time)
     {
         //this.trigger("framing");
-        this.update();
-        this.render();
+        this.update(time);
+        this.render(time);
 
         if (this.animating)
         {
             window.requestAnimationFrame(this.renderLoop.bind(this));
         }
+    }
+
+
+
+
+
+    moveCamera(position, rotation, duration = 1000, up)
+    {
+        return new Promise(resolve => {
+            this.cameraControlsEnabled = false;
+
+            if (position)
+            {
+                new TWEEN.Tween(this.camera.position).to(position, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
+            }
+
+            if (rotation)
+            {
+                new TWEEN.Tween(this.camera.rotation).to(rotation, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
+            }
+
+            if (up)
+            {
+                new TWEEN.Tween(this.cameraControls.object.up).to(up, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
+            }
+            else
+            {
+                this.cameraControls.reset();
+            }
+
+            setTimeout(() =>
+            {
+                this.cameraControlsEnabled = true;
+                resolve();
+            }, duration);
+        });
+    }
+
+    moveCameraTarget(position, duration = 1000)
+    {
+        return new Promise(resolve => {
+            if (position)
+            {
+                this.cameraControlsEnabled = false;
+                new TWEEN.Tween(this.cameraControls.target).to(position, duration).easing(TWEEN.Easing.Sinusoidal.Out).onComplete(() =>
+                {
+                    this.cameraControlsEnabled = true;
+                    resolve();
+                }).start();
+            }
+            else
+            {
+                this.cameraControlsEnabled = true;
+                resolve();
+            }
+        });
+    }
+
+    focusLine(vector1, vector2, overlookDegree = 0, duration = 1000, debug = false)
+    {
+        return new Promise(resolve => {
+            let material = null;
+            let geometry = null;
+            let line = null;
+
+            let mVector = vector1.clone();
+            mVector = mVector.lerp(vector2, 0.5);
+
+            let cVector = new THREE.Vector3();
+            cVector.subVectors(vector2, vector1);
+            let vLength = cVector.length();
+
+            let quaternion = new THREE.Quaternion();
+            let axis = new THREE.Vector3(0, 0, 1);
+            quaternion.setFromAxisAngle(axis, -Math.PI / 2);
+            cVector.applyQuaternion(quaternion);
+
+            let angle = (90 - this.camera.fov / 2) * Math.PI / 180;
+            let focusLength = vLength * 0.5 * Math.tan(angle);
+            cVector.normalize().multiplyScalar(focusLength);
+
+            let overlookAngle = overlookDegree * Math.PI / 180;
+            cVector.z = focusLength * Math.tan(overlookAngle);
+            cVector.add(mVector);
+
+            if (debug)
+            {
+                material = new THREE.LineBasicMaterial({
+                    color : 0xffffff
+                });
+                geometry = new THREE.Geometry();
+                geometry.vertices.push(mVector);
+                geometry.vertices.push(cVector);
+                line = new THREE.Line(geometry, material);
+                this.add(line);
+            }
+
+            if (this.cameraControlsEnabled && this.cameraControls != null)
+            {
+                this.cameraControlsEnabled = false;
+
+                new TWEEN.Tween(this.cameraControls.target).to(mVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
+                new TWEEN.Tween(this.camera.position).to(cVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).onUpdate(() =>
+                {
+                    this.camera.lookAt(this.cameraControls.target);
+                }).start();
+                new TWEEN.Tween(this.cameraControls.object.up).to({
+                    x : 0,
+                    y : 0,
+                    z : 1
+                }, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
+
+                setTimeout(() =>
+                {
+                    this.cameraControlsEnabled = true;
+                    resolve();
+                }, duration);
+            }
+        });
+    }
+
+    focusTriangle(vector1, vector2, vector3, overlookDegree = 0, duration = 1000, debug = false)
+    {
+        return new Promise(() => {
+            let material = null;
+            let geometry = null;
+            let line = null;
+
+            let mVector = vector1.clone();
+            mVector = mVector.lerp(vector2, 0.5);
+
+            let cVector = new THREE.Vector3();
+            cVector.subVectors(vector2, vector1);
+            let vLength = cVector.length();
+
+            let quaternion = new THREE.Quaternion();
+            let axis = new THREE.Vector3(0, 0, 1);
+            quaternion.setFromAxisAngle(axis, -Math.PI / 2);
+            cVector.applyQuaternion(quaternion);
+
+            let angle = (90 - me.camera.fov / 2) * Math.PI / 180;
+            let overlookAngle = overlookDegree * Math.PI / 180;
+
+            let focusLength1 = vLength * 0.5 * Math.tan(angle);
+            let height = Math.abs(vector3.z) + 100;
+            let focusLength2 = height * (Math.sin(overlookAngle) + Math.cos(overlookAngle) * Math.tan(angle)) * Math.cos(overlookAngle);
+            let focusLength = focusLength1 > focusLength2 ? focusLength1 : focusLength2;
+
+            cVector.normalize().multiplyScalar(focusLength);
+            cVector.z = focusLength * Math.tan(overlookAngle);
+            cVector.add(mVector);
+
+            if (debug)
+            {
+                material = new THREE.LineBasicMaterial({
+                    color : 0xffffff
+                });
+                geometry = new THREE.Geometry();
+                geometry.vertices.push(mVector);
+                geometry.vertices.push(cVector);
+                line = new THREE.Line(geometry, material);
+                this.add(line);
+            }
+
+            if (this.cameraControlsEnabled && this.cameraControls)
+            {
+                this.cameraControlsEnabled = false;
+
+                new TWEEN.Tween(this.cameraControls.target).to(mVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
+                new TWEEN.Tween(this.camera.position).to(cVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).onUpdate(() =>
+                {
+                    this.camera.lookAt(this.cameraControls.target);
+                }).start();
+                new TWEEN.Tween(this.cameraControls.object.up).to({
+                    x : 0,
+                    y : 0,
+                    z : 1
+                }, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
+
+                setTimeout(() =>
+                {
+                    this.cameraControlsEnabled = true;
+                    resolve();
+                }, duration);
+            }
+        });
     }
 }

@@ -7,7 +7,7 @@ const webpack = require("webpack");
 module.exports = {
     context: path.resolve("./src"),
     entry: {
-        "vendor": [ "jquery", "three" ],
+        "vendor": [ "jquery", "three", "tween.js" ],
         "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ],
         "simple-cube": [ "./examples/simple-cube/index.js", "./examples/simple-cube/res/index.less" ]
     },
@@ -50,7 +50,8 @@ module.exports = {
         new webpack.ProvidePlugin({
             "$": "jquery",
             "jQuery": "jquery",
-            "THREE": "three"
+            "THREE": "three",
+            "TWEEN": "tween.js"
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: "vendor",
