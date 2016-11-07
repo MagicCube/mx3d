@@ -5,5 +5,9 @@ $(() => {
         $element: $("body")
     });
 
+    window.onresize = () => {
+        scene.updateFrame();
+    };
+
     scene.startAnimation();
 });

@@ -1,3 +1,4 @@
+import "THREE/effects/AnaglyphEffect";
 import "THREE/controls/TrackballControls";
 import "THREE/loaders/OBJLoader";
 
@@ -16,12 +17,10 @@ export default class Scene
     }
 
     init({
-        $element,
-        anaglyphEffectEnabled = false
+        $element
     } = {})
     {
         this.$element = $element ? $element : $(document.body);
-        this.anaglyphEffectEnabled = anaglyphEffectEnabled;
 
         this.initFrame();
         this.initRoot();
@@ -34,10 +33,7 @@ export default class Scene
 
     initFrame()
     {
-        this.frame = {
-            width: this.$element.width(),
-            height: this.$element.height()
-        };
+        this.updateFrame();
     }
 
     initRoot()
@@ -182,5 +178,13 @@ export default class Scene
     update()
     {
 
+    }
+
+    updateFrame()
+    {
+        this.frame = {
+            width: this.$element.width(),
+            height: this.$element.height()
+        };
     }
 }
