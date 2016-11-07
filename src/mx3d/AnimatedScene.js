@@ -271,4 +271,53 @@ export default class AnimatedScene extends Scene
             }
         });
     }
+
+    resetCamera(perspective = false, duration = 2000)
+    {
+        if (this.cameraControls)
+        {
+            let position = null;
+            let rotation = null;
+
+            if (!perspective)
+            {
+                let params = me.cameraParams;
+                position = {
+                    x : 0,
+                    y : 0,
+                    z : 0
+                };
+                rotation = {
+                    x : 0,
+                    y : 0,
+                    z : 0
+                };
+                if (Array.isArray(params.position))
+                {
+                    position.x = params.position[0];
+                    position.y = params.position[1];
+                    position.z = params.position[2];
+                }
+                else
+                {
+                    position = Object.assign(position, params.position);
+                }
+           }
+           else
+           {
+                position = {
+                    x : -50.9760365348891,
+                    y : -1750.5946134789813,
+                    z : 2470.697634926914
+                };
+                rotation = {
+                    x : 0.6164362891923738,
+                    y : -0.01683316387367657,
+                    z : 0.01192588582967832
+                };
+           }
+           return this.moveCamera(position, rotation, duration);
+       }
+       return Promise.reject();
+   };
 }
