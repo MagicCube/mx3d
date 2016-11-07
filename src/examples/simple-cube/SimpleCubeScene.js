@@ -27,7 +27,7 @@ export default class SimpleCubeScene extends AnimatedScene
     update()
     {
         super.update();
-        //this.cube.rotation.x += 0.01;
-        //this.cube.rotation.y += 0.02;
+        this.cube.rotation.x += 0.01;
+        this.cube.rotation.y += 0.02;
     }
 }

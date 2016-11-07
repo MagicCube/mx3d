@@ -1,6 +1,6 @@
-import Scene from "mx3d/Scene";
+import AnimatedScene from "mx3d/AnimatedScene";
 
-export default class BridgeScene extends Scene
+export default class BridgeScene extends AnimatedScene
 {
     init()
     {
@@ -19,22 +19,19 @@ export default class BridgeScene extends Scene
     _initBridge()
     {
         const loader = new THREE.OBJLoader();
+        const material = new THREE.MeshBasicMaterial({color: 'gray', side: THREE.DoubleSide});
         loader.load(
            "/models/bridge.obj",
-           bridge => {
-               this.bridge = bridge;
-               this.add(this.bridge);
-           }
-        );
-    }
+           obj => {
+               obj.traverse((child) => {
+                   if (child instanceof THREE.Mesh)
+                   {
+                       child.material = material;
+                   }
 
-    update()
-    {
-        super.update();
-        if (this.bridge)
-        {
-            this.bridge.rotation.x += 0.01;
-            this.bridge.rotation.y += 0.02;
-        }
+               });
+               this.add(obj);
+            }
+        );
     }
 }
