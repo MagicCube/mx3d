@@ -242,8 +242,7 @@ export default class Scene extends EventEmitter
             // create a Ray with origin at the mouse position
             // and direction into the scene (camera direction)
             const vector = new THREE.Vector3(mouse.x, mouse.y, mouse.z);
-            const projector = new THREE.Projector();
-            projector.unprojectVector(vector, this.camera);
+            vector.unproject(this.camera);
 
             const origin = this.camera.position;
             const dir = vector.sub(this.camera.position).normalize();

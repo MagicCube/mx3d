@@ -14,7 +14,11 @@ export default class BridgeScene extends StandardScene
         super.init();
 
         this.on("objectClick", e => {
-            console.log(e.objects[0].name);
+            const name = e.objects[0].name;
+            if (name.startsWith("Rectangle"))
+            {
+                console.log(name);
+            }
         });
     }
 

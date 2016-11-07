@@ -12,8 +12,7 @@ module.exports = {
             "three",
             "./THREE/effects/AnaglyphEffect",
             "./THREE/controls/TrackballControls",
-            "./THREE/loaders/OBJLoader",
-            "./THREE/renderer/Projector"
+            "./THREE/loaders/OBJLoader"
         ],
         "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ],
         "simple-cube": [ "./examples/simple-cube/index.js", "./examples/simple-cube/res/index.less" ]
