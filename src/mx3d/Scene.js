@@ -5,6 +5,7 @@ import "THREE/loaders/OBJLoader";
 export default class Scene
 {
     anaglyphEffectEnabled = false;
+    backgroundColor = 0;
 
     $element = null;
     cameraParams = {};
@@ -33,7 +34,7 @@ export default class Scene
 
     initFrame()
     {
-        this.updateFrame();
+        this.invalidateSize();
     }
 
     initRoot()
@@ -98,6 +99,7 @@ export default class Scene
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMapSoft = true;
         this.$element.append(this.renderer.domElement);
+        this.renderer.setClearColor(this.backgroundColor);
 
         if (this.renderMode === "composer")
         {
@@ -180,11 +182,29 @@ export default class Scene
 
     }
 
-    updateFrame()
+    invalidateSize()
     {
         this.frame = {
             width: this.$element.width(),
             height: this.$element.height()
         };
+
+        if (this.camera != null)
+        {
+            this.camera.aspect = this.frame.width / this.frame.height;
+            this.camera.updateProjectionMatrix();
+        }
+
+        this.update();
+
+        if (this.renderer != null)
+        {
+            this.renderer.setSize(this.frame.width, this.frame.height);
+        }
+
+        if (this.anaglyphEffect != null)
+        {
+            this.anaglyphEffect.setSize(this.frame.width, this.frame.height);
+        }
     }
 }

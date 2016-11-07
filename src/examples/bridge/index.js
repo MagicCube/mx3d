@@ -4,5 +4,10 @@ $(() => {
     const scene = new BridgeScene({
         $element: $("body")
     });
+
+    window.onresize = () => {
+        scene.updateFrame();
+    };
+
     scene.startAnimation();
 });

@@ -1,9 +1,10 @@
-import AnimatedScene from "mx3d/AnimatedScene";
+import StandardScene from "mx3d/StandardScene";
 
-export default class BridgeScene extends AnimatedScene
+export default class BridgeScene extends StandardScene
 {
     init()
     {
+        this.backgroundColor = 0x213857;
         this.anaglyphEffectEnabled = false;
         this.cameraParams = {
             position: { z: 100 }
@@ -20,7 +21,7 @@ export default class BridgeScene extends AnimatedScene
     _initBridge()
     {
         const loader = new THREE.OBJLoader();
-        const material = new THREE.MeshPhongMaterial( { color: 0x6F6CC5, specular: 0x555555, shininess: 30 } );
+        const material = new THREE.MeshPhongMaterial( { color: 0xaaaaaa, specular: 0x555555, shininess: 50 } );
         loader.load(
            "/models/bridge.obj",
            obj => {
@@ -33,23 +34,5 @@ export default class BridgeScene extends AnimatedScene
                this.add(obj);
             }
         );
-    }
-
-    initLights()
-    {
-        super.initLights();
-        const ambiColor = "#444";
-        const ambientLight = new THREE.AmbientLight(ambiColor);
-        this.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-        dirLight.position.set(100, 100, 50);
-        this.add(dirLight);
-    }
-
-    initRenderer()
-    {
-        super.initRenderer();
-        this.renderer.setClearColor(0x213857);
     }
 }
