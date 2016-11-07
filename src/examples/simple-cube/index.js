@@ -2,14 +2,8 @@ import SimpleCubeScene from "./SimpleCubeScene";
 
 $(() => {
     const scene = new SimpleCubeScene({
-        $container: $("body")
+        $element: $("body")
     });
 
-    function animationLoop()
-    {
-        scene.update();
-        scene.render();
-        window.requestAnimationFrame(animationLoop);
-    }
-    animationLoop();
+    scene.startAnimation();
 });

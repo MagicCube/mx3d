@@ -1,6 +1,6 @@
-import Scene from "mx3d/Scene";
+import AnimatedScene from "mx3d/AnimatedScene";
 
-export default class SimpleCubeScene extends Scene
+export default class SimpleCubeScene extends AnimatedScene
 {
     init()
     {
@@ -27,7 +27,7 @@ export default class SimpleCubeScene extends Scene
     update()
     {
         super.update();
-        this.cube.rotation.x += 0.01;
-        this.cube.rotation.y += 0.02;
+        //this.cube.rotation.x += 0.01;
+        //this.cube.rotation.y += 0.02;
     }
 }

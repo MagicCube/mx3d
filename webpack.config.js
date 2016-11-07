@@ -14,6 +14,7 @@ module.exports = {
     resolve: {
         alias: {
             "mx3d": path.resolve("./src/mx3d"),
+            "THREE": path.resolve("./src/THREE"),
             "normalize.less": path.resolve("./src/normalize/res/normalize.less")
         }
     },

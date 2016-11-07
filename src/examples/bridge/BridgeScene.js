@@ -5,7 +5,7 @@ export default class BridgeScene extends Scene
     init()
     {
         this.cameraParams = {
-            position: { z: 1000 }
+            position: { z: 100 }
         };
 
         super.init();
@@ -13,21 +13,28 @@ export default class BridgeScene extends Scene
 
     initObjects()
     {
-        this._initCube();
+        this._initBridge();
     }
 
-    _initCube()
+    _initBridge()
     {
-        const geometry = new THREE.BoxGeometry(200, 200, 200);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-        this.cube = new THREE.Mesh( geometry, material );
-        this.add(this.cube);
+        const loader = new THREE.OBJLoader();
+        loader.load(
+           "/models/bridge.obj",
+           bridge => {
+               this.bridge = bridge;
+               this.add(this.bridge);
+           }
+        );
     }
 
     update()
     {
         super.update();
-        this.cube.rotation.x += 0.01;
-        this.cube.rotation.y += 0.02;
+        if (this.bridge)
+        {
+            this.bridge.rotation.x += 0.01;
+            this.bridge.rotation.y += 0.02;
+        }
     }
 }

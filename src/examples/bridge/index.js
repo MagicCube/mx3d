@@ -2,7 +2,7 @@ import BridgeScene from "./BridgeScene";
 
 $(() => {
     const scene = new BridgeScene({
-        $container: $("body")
+        $element: $("body")
     });
 
     function animationLoop()

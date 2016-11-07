@@ -1,24 +1,28 @@
+import "THREE/controls/TrackballControls";
+import "THREE/loaders/OBJLoader";
+
 export default class Scene
 {
     anaglyphEffectEnabled = false;
 
-    $container = null;
+    $element = null;
     cameraParams = {};
     rendererParams = {};
     frame = { };
 
-    constructor({
-        $container,
+    constructor(options)
+    {
+        this.init(options);
+    }
+
+    init({
+        $element,
         anaglyphEffectEnabled = false
     } = {})
     {
-        this.$container = $container ? $container : $(document.body);
+        this.$element = $element ? $element : $(document.body);
         this.anaglyphEffectEnabled = anaglyphEffectEnabled;
-        this.init();
-    }
 
-    init()
-    {
         this.initFrame();
         this.initRoot();
         this.initCamera();
@@ -30,10 +34,9 @@ export default class Scene
 
     initFrame()
     {
-        console.log(this.$container.width(), this.$container.height());
         this.frame = {
-            width: window.innerWidth,
-            height: window.innerHeight
+            width: this.$element.width(),
+            height: this.$element.height()
         };
     }
 
@@ -96,9 +99,9 @@ export default class Scene
         this.renderer.gammaInput = true;
         this.renderer.gammaOutput = true;
         this.renderer.physicallyBasedShading = true;
-        this.renderer.shadowMapEnabled = true;
+        this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMapSoft = true;
-        this.$container.append(this.renderer.domElement);
+        this.$element.append(this.renderer.domElement);
 
         if (this.renderMode === "composer")
         {
