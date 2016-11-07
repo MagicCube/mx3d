@@ -1,19 +1,22 @@
-import "THREE/effects/AnaglyphEffect";
-import "THREE/controls/TrackballControls";
-import "THREE/loaders/OBJLoader";
+import EventEmitter from "wolfy87-eventemitter";
 
-export default class Scene
+export default class Scene extends EventEmitter
 {
     anaglyphEffectEnabled = false;
     backgroundColor = 0;
 
+    clickable = false;
+    clickableObjects = [];
+
     $element = null;
+    frame = {};
+
     cameraParams = {};
     rendererParams = {};
-    frame = { };
 
     constructor(options)
     {
+        super();
         this.init(options);
     }
 
@@ -30,6 +33,8 @@ export default class Scene
         this.initEffects();
         this.initObjects();
         this.initLights();
+
+        this.$element.on("mouseup", "canvas", this.onmouseup.bind(this));
     }
 
     initFrame()
@@ -205,6 +210,60 @@ export default class Scene
         if (this.anaglyphEffect != null)
         {
             this.anaglyphEffect.setSize(this.frame.width, this.frame.height);
+        }
+    }
+
+
+
+
+
+
+    onmouseup(e)
+    {
+        if (!this.clickable)
+        {
+            return;
+        }
+
+        e.preventDefault();
+
+        if (e.button === 0)
+        {
+            // update the mouse variable
+            let mouse = {
+                x : 0,
+                y : 0,
+                z : 0
+            };
+            mouse.x = (e.clientX / this.frame.width) * 2 - 1;
+            mouse.y = -(e.clientY / this.frame.height) * 2 + 1;
+            mouse.z = 1;
+
+            // create a Ray with origin at the mouse position
+            // and direction into the scene (camera direction)
+            const vector = new THREE.Vector3(mouse.x, mouse.y, mouse.z);
+            const projector = new THREE.Projector();
+            projector.unprojectVector(vector, this.camera);
+
+            const origin = this.camera.position;
+            const dir = vector.sub(this.camera.position).normalize();
+            const ray = new THREE.Raycaster();
+            ray.set(origin, dir);
+
+            // create an array containing all objects in the scene with which
+            // the ray intersects
+            const intersects = ray.intersectObjects(this.clickableObjects);
+            if (intersects.length > 0)
+            {
+                let objects = intersects.map(intersect =>
+                {
+                    return intersect.object;
+                });
+                this.trigger("objectClick", [{
+                    objects : objects,
+                    intersects : intersects
+                }]);
+            }
         }
     }
 }

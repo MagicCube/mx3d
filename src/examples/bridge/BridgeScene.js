@@ -4,6 +4,7 @@ export default class BridgeScene extends StandardScene
 {
     init()
     {
+        this.clickable = true;
         this.backgroundColor = 0x213857;
         this.anaglyphEffectEnabled = false;
         this.cameraParams = {
@@ -11,6 +12,10 @@ export default class BridgeScene extends StandardScene
         };
 
         super.init();
+
+        this.on("objectClick", e => {
+            console.log(e.objects[0].name);
+        });
     }
 
     initObjects()
@@ -29,6 +34,7 @@ export default class BridgeScene extends StandardScene
                    if (child instanceof THREE.Mesh)
                    {
                        child.material = material;
+                       this.clickableObjects.push(child);
                    }
                });
                this.add(obj);

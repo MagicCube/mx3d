@@ -7,14 +7,20 @@ const webpack = require("webpack");
 module.exports = {
     context: path.resolve("./src"),
     entry: {
-        "vendor": [ "jquery", "three", "tween.js" ],
+        "vendor": [ "jquery", "tween.js" ],
+        "three": [
+            "three",
+            "./THREE/effects/AnaglyphEffect",
+            "./THREE/controls/TrackballControls",
+            "./THREE/loaders/OBJLoader",
+            "./THREE/renderer/Projector"
+        ],
         "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ],
         "simple-cube": [ "./examples/simple-cube/index.js", "./examples/simple-cube/res/index.less" ]
     },
     resolve: {
         alias: {
             "mx3d": path.resolve("./src/mx3d"),
-            "THREE": path.resolve("./src/THREE"),
             "normalize.less": path.resolve("./src/normalize/res/normalize.less")
         }
     },
