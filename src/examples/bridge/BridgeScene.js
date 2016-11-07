@@ -4,7 +4,7 @@ export default class BridgeScene extends AnimatedScene
 {
     init()
     {
-        this.anaglyphEffectEnabled = true;
+        this.anaglyphEffectEnabled = false;
         this.cameraParams = {
             position: { z: 100 }
         };
@@ -29,7 +29,6 @@ export default class BridgeScene extends AnimatedScene
                    {
                        child.material = material;
                    }
-
                });
                this.add(obj);
             }
@@ -46,5 +45,11 @@ export default class BridgeScene extends AnimatedScene
         const dirLight = new THREE.DirectionalLight(0xffffff, 1);
         dirLight.position.set(100, 100, 50);
         this.add(dirLight);
+    }
+
+    initRenderer()
+    {
+        super.initRenderer();
+        this.renderer.setClearColor(0x213857);
     }
 }
