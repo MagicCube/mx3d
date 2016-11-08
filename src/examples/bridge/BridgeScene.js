@@ -42,7 +42,7 @@ export default class BridgeScene extends StandardScene
     {
         const loader = new THREE.OBJLoader();
         loader.load(
-           "/models/bridge.obj",
+           "../../models/bridge.obj",
            obj => {
                obj.traverse((child) => {
                    if (child instanceof THREE.Mesh)
