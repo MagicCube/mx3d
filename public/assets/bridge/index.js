@@ -114,7 +114,7 @@ webpackJsonp([0],[
 	            var _this3 = this;
 
 	            var loader = new THREE.OBJLoader();
-	            loader.load("/models/bridge.obj", function (obj) {
+	            loader.load("../../models/bridge.obj", function (obj) {
 	                obj.traverse(function (child) {
 	                    if (child instanceof THREE.Mesh) {
 	                        child.material = _this3.bridgeMaterial;
