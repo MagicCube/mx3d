@@ -2,17 +2,24 @@ import EventEmitter from "wolfy87-eventemitter";
 
 export default class Scene extends EventEmitter
 {
-    anaglyphEffectEnabled = false;
     backgroundColor = 0;
-
-    clickable = false;
-    clickableObjects = [];
 
     $element = null;
     frame = {};
 
+    clickable = false;
+    clickableObjects = [];
+
+    camera = null;
     cameraParams = {};
+
+    renderer = null;
     rendererParams = {};
+
+    composer = null;
+
+    anaglyphEffect = null;
+    anaglyphEffectEnabled = false;
 
     constructor(options)
     {
@@ -35,6 +42,7 @@ export default class Scene extends EventEmitter
         this.initLights();
 
         this.$element.on("mouseup", "canvas", this.onmouseup.bind(this));
+        this.$element.on("touchstart", "canvas", this.onmouseup.bind(this));
     }
 
     initFrame()
@@ -227,10 +235,12 @@ export default class Scene extends EventEmitter
 
         e.preventDefault();
 
-        if (e.button === 0)
+        let mouse = null;
+
+        if (e.type === "mouseup" && e.button === 0)
         {
             // update the mouse variable
-            let mouse = {
+            mouse = {
                 x : 0,
                 y : 0,
                 z : 0
@@ -238,7 +248,21 @@ export default class Scene extends EventEmitter
             mouse.x = (e.clientX / this.frame.width) * 2 - 1;
             mouse.y = -(e.clientY / this.frame.height) * 2 + 1;
             mouse.z = 1;
+        }
+        else if (e.type === "touchstart")
+        {
+            mouse = {
+                x : 0,
+                y : 0,
+                z : 0
+            };
+            mouse.x = (e.touches[0].clientX / this.frame.width) * 2 - 1;
+            mouse.y = -(e.touches[0].clientY / this.frame.height) * 2 + 1;
+            mouse.z = 1;
+        }
 
+        if (mouse)
+        {
             // create a Ray with origin at the mouse position
             // and direction into the scene (camera direction)
             const vector = new THREE.Vector3(mouse.x, mouse.y, mouse.z);

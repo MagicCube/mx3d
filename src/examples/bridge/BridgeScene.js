@@ -2,6 +2,10 @@ import StandardScene from "mx3d/StandardScene";
 
 export default class BridgeScene extends StandardScene
 {
+    selectedObject = null;
+    bridgeMaterial = new THREE.MeshPhongMaterial( { color: 0xaaaaaa, specular: 0x555555, shininess: 50 } );
+    selectedMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0x555555, shininess: 50 } );
+
     init()
     {
         this.clickable = true;
@@ -17,7 +21,14 @@ export default class BridgeScene extends StandardScene
             const name = e.objects[0].name;
             if (name.startsWith("Rectangle"))
             {
-                console.log(name);
+                if (this.selectedObject === e.objects[0]) return;
+                if (this.selectedObject)
+                {
+                    this.selectedObject.material = this.bridgeMaterial;
+                    this.selectedObject = null;
+                }
+                this.selectedObject = e.objects[0];
+                this.selectedObject.material = this.selectedMaterial;
             }
         });
     }
@@ -30,14 +41,13 @@ export default class BridgeScene extends StandardScene
     _initBridge()
     {
         const loader = new THREE.OBJLoader();
-        const material = new THREE.MeshPhongMaterial( { color: 0xaaaaaa, specular: 0x555555, shininess: 50 } );
         loader.load(
            "/models/bridge.obj",
            obj => {
                obj.traverse((child) => {
                    if (child instanceof THREE.Mesh)
                    {
-                       child.material = material;
+                       child.material = this.bridgeMaterial;
                        this.clickableObjects.push(child);
                    }
                });

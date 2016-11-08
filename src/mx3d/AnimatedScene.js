@@ -2,6 +2,7 @@ import Scene from "./Scene";
 
 export default class AnimatedScene extends Scene
 {
+    cameraControls = null;
     cameraControlsEnabled = true;
 
     init(options)
