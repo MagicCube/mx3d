@@ -89,6 +89,18 @@ export default class AnimatedScene extends Scene
 
 
 
+    showGrid(size = 100, step = 10)
+    {
+        if (!this.gridHelper)
+        {
+            this.gridHelper = new THREE.GridHelper(size, step);
+        }
+        this.gridHelper.size = size;
+        this.gridHelper.step = step;
+        this.add(this.gridHelper);
+    }
+
+
 
 
     moveCamera(position, rotation, duration = 1000, up)
@@ -172,14 +184,8 @@ export default class AnimatedScene extends Scene
 
             if (debug)
             {
-                material = new THREE.LineBasicMaterial({
-                    color : 0xffffff
-                });
-                geometry = new THREE.Geometry();
-                geometry.vertices.push(mVector);
-                geometry.vertices.push(cVector);
-                line = new THREE.Line(geometry, material);
-                this.add(line);
+                const arrowHelper = new THREE.ArrowHelper(cVector, mVector, 20, 0xff0000);
+                this.add(arrowHelper);
             }
 
             if (this.cameraControlsEnabled && this.cameraControls != null)

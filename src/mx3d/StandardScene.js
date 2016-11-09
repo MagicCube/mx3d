@@ -13,4 +13,9 @@ export default class StandardScene extends AnimatedScene
         this.sunLight.position.set(100, 100, 50);
         this.add(this.sunLight);
     }
+
+    initObjects()
+    {
+        
+    }
 }

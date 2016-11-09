@@ -35,6 +35,8 @@ export default class BridgeScene extends StandardScene
 
     initObjects()
     {
+        super.initObjects();
+        this.showGrid(150, 15);
         this._initBridge();
     }
 
