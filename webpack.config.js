@@ -14,13 +14,12 @@ module.exports = {
             "./THREE/controls/TrackballControls",
             "./THREE/loaders/OBJLoader"
         ],
-        "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ],
-        "simple-cube": [ "./examples/simple-cube/index.js", "./examples/simple-cube/res/index.less" ]
+        "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ]
     },
     resolve: {
         alias: {
             "mx3d": path.resolve("./src/mx3d"),
-            "normalize.less": path.resolve("./src/normalize/res/normalize.less")
+            "normalize.css": path.resolve("./node_modules/normalize.css/normalize.css")
         }
     },
     output: {
@@ -46,7 +45,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: "css-loader!less-loader"
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader")
             }
         ]
     },
