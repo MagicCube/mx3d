@@ -1,6 +1,8 @@
 import EventEmitter from "wolfy87-eventemitter";
 
-export default class Scene extends EventEmitter
+import Object3D from "../obj/Object3D";
+
+export default class Scene3D extends EventEmitter
 {
     backgroundColor = 0;
 
@@ -150,12 +152,26 @@ export default class Scene extends EventEmitter
 
     add(obj)
     {
-        this.root.add(obj);
+        if (obj instanceof Object3D)
+        {
+            this.root.add(obj.mesh);
+        }
+        else
+        {
+            this.root.add(obj);
+        }
     }
 
     remove(obj)
     {
-       this.root.remove(obj);
+        if (obj instanceof Object3D)
+        {
+            this.root.remove(obj.mesh);
+        }
+        else
+        {
+            this.root.remove(obj);
+        }
     }
 
     addLight(light, helperClass)

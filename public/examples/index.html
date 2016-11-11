@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bridge 3D</title>
+    <script src="../lib/jquery.js"></script>
+    <style>
+    html, body
+    {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .bridge-scene-container
+    {
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+</head>
+<body>
+
+<div id="bridgeSceneContainer1" class="bridge-scene-container"></div>
+<script src="../assets/bridge3d.js" charset="utf-8"></script>
+<script>
+    var bridgeScene = null;
+    $(function() {
+        bridgeScene = new bridge3d.BridgeScene({
+            $element: $("#bridgeSceneContainer1")
+        });
+        $(window).on("resize", function(e) {
+            bridgeScene.invalidateSize();
+        });
+        bridgeScene.startAnimation();
+    });
+</script>
+
+</body>
+</html>

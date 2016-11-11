@@ -1,6 +1,6 @@
-import AnimatedScene from "mx3d/AnimatedScene";
+import AnimatedScene3D from "./AnimatedScene3D";
 
-export default class StandardScene extends AnimatedScene
+export default class StandardScene3D extends AnimatedScene3D
 {
     initLights()
     {
@@ -16,6 +16,6 @@ export default class StandardScene extends AnimatedScene
 
     initObjects()
     {
-        
+
     }
 }

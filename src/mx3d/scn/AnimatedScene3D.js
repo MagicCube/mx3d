@@ -1,6 +1,6 @@
-import Scene from "./Scene";
+import Scene3D from "./Scene3D";
 
-export default class AnimatedScene extends Scene
+export default class AnimatedScene3D extends Scene3D
 {
     cameraControls = null;
     cameraControlsEnabled = true;
