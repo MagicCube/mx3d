@@ -4,10 +4,9 @@ export default class Bridge extends Object3D
 {
     sensors = [];
 
-    constructor()
-    {
-        super();
-    }
+    bridgeMaterial = new THREE.MeshPhongMaterial( { color: 0x9999aa, specular: 0x555555, shininess: 50 } );
+    sensorMaterial = new THREE.MeshPhongMaterial( { color: 0xffbc78, specular: 0x555555, shininess: 100 } );
+    selectedSensorMaterial = new THREE.MeshPhongMaterial( { color: 0xff8112, specular: 0x555555, shininess: 100 } );
 
     async load(onProcess)
     {
@@ -37,18 +36,29 @@ export default class Bridge extends Object3D
                     id,
                     name: child.name,
                     mesh: child,
-                    under
+                    under,
+                    visible: true
                 };
+                sensor.mesh.material = this.sensorMaterial;
                 this.sensors["sensor#" + sensor.id] = sensor;
                 this.sensors[sensor.name] = sensor;
                 this.sensors.push(sensor);
             }
+            else
+            {
+                child.material = this.bridgeMaterial;
+            }
         });
+        this.hideAllSensors();
         console.log(`[bridge3d] ${this.sensors.length} sensors found.`);
     }
 
     getSensor(key)
     {
+        if (key.name)
+        {
+            key = key.name;
+        }
         if (typeof(key) === "number")
         {
             return this.sensors[key];
@@ -64,5 +74,43 @@ export default class Bridge extends Object3D
                 return this.sensors[key];
             }
         }
+    }
+
+    showSensors(sensorIds)
+    {
+        this.sensors.forEach(sensor => {
+            sensor.visible = sensorIds.indexOf(sensor.id) != -1;
+            if (sensor.visible)
+            {
+                this.mesh.add(sensor.mesh);
+            }
+            else
+            {
+                this.mesh.remove(sensor.mesh);
+            }
+        });
+    }
+
+    hideAllSensors()
+    {
+        this.sensors.forEach(sensor => {
+            sensor.visible = false;
+            this.mesh.remove(sensor.mesh);
+        });
+    }
+
+    selectSensor(key)
+    {
+        if (key === undefined || key === null)
+        {
+            return;
+        }
+        const sensor = this.getSensor(key);
+        if (!sensor)
+        {
+            return;
+        }
+
+        console.log(sensor);
     }
 }

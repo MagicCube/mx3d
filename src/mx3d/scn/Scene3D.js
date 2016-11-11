@@ -300,7 +300,7 @@ export default class Scene3D extends EventEmitter
                 {
                     return intersect.object;
                 });
-                this.trigger("objectClick", [{
+                this.trigger("objectclick", [{
                     objects : objects,
                     intersects : intersects
                 }]);

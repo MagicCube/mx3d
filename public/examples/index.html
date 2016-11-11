@@ -26,10 +26,18 @@
         bridgeScene = new bridge3d.BridgeScene({
             $element: $("#bridge-scene")
         });
+        bridgeScene.startAnimation();
+
+        // <<<注意>>>：所有对桥梁 bridge 的操作都必须在 load 事件之后。
+        bridgeScene.on("load", function(e) {
+            // 只显示所有应变传感器，应变传感器的 ID 事先从
+            // 数据库中读出。
+            bridgeScene.bridge.showSensors(["0402", "0401", "0403", "0404", "0405", "0406", "0407", "0408", "0409", "0410", "0416", "0414", "0412", "0417", "0418", "0419", "0420", "0421", "0422", "0423", "0424", "0425", "0426", "0432", "0430", "0428", "0411", "0413", "0415", "0431", "0429", "0427"]);
+        });
+
         $(window).on("resize", function(e) {
             bridgeScene.invalidateSize();
         });
-        bridgeScene.startAnimation();
     });
 </script>
 

@@ -15,12 +15,14 @@ export default class BridgeScene3D extends StandardScene3D
 
         super.init(options);
         this.$element.addClass("bridge-scene-3d");
+
+        this.on("objectclick", this._onobjectclick.bind(this));
     }
 
     initObjects()
     {
         super.initObjects();
-        this.showGrid(150, 15);
+        this.showGrid(200, 40);
         this._initBridge();
     }
 
@@ -31,6 +33,23 @@ export default class BridgeScene3D extends StandardScene3D
         await this.bridge.load(e => {
 
         });
+        this.bridge.sensors.forEach(sensor => {
+            this.clickableObjects.push(sensor.mesh);
+        });
         this.add(this.bridge);
+        this.trigger("load");
+    }
+
+
+    _onobjectclick(e)
+    {
+        const obj = e.objects[0];
+        if (obj.name.startsWith("sensor_"))
+        {
+            this.trigger("sensorclick", [{
+                sensor: this.bridge.getSensor(obj)
+            }]);
+            this.bridge.selectSensor(obj);
+        }
     }
 }
