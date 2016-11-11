@@ -34,6 +34,7 @@ export default class Scene3D extends EventEmitter
     } = {})
     {
         this.$element = $element ? $element : $(document.body);
+        this.$element.addClass("scene3d");
 
         this.initFrame();
         this.initRoot();
@@ -113,7 +114,8 @@ export default class Scene3D extends EventEmitter
         this.renderer.physicallyBasedShading = true;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMapSoft = true;
-        this.$element.append(this.renderer.domElement);
+        const $renderer = $(this.renderer.domElement);
+        this.$element.append($renderer);
         this.renderer.setClearColor(this.backgroundColor);
 
         if (this.renderMode === "composer")

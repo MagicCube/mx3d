@@ -14,6 +14,7 @@ export default class BridgeScene3D extends StandardScene3D
         };
 
         super.init(options);
+        this.$element.addClass("bridge-scene-3d");
     }
 
     initObjects()
@@ -25,8 +26,11 @@ export default class BridgeScene3D extends StandardScene3D
 
     async _initBridge()
     {
+        const $loading = $("");
         this.bridge = new Bridge();
-        await this.bridge.load();
+        await this.bridge.load(e => {
+
+        });
         this.add(this.bridge);
     }
 }

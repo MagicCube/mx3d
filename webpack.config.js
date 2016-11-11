@@ -43,7 +43,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin("./res/index.css"),
+        new ExtractTextPlugin("./res/bridge3d.css"),
         new webpack.ProvidePlugin({
             "THREE": "three",
             "TWEEN": "tween.js"

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Bridge 3D</title>
+    <link rel="stylesheet" href="../assets/res/bridge3d.css">
     <script src="../lib/jquery.js"></script>
+    <script src="../assets/bridge3d.js" charset="utf-8"></script>
     <style>
     html, body
     {
@@ -13,23 +15,16 @@
         margin: 0;
         padding: 0;
     }
-
-    .bridge-scene-container
-    {
-        width: 100%;
-        height: 100%;
-    }
     </style>
 </head>
 <body>
 
-<div id="bridgeSceneContainer1" class="bridge-scene-container"></div>
-<script src="../assets/bridge3d.js" charset="utf-8"></script>
+<div id="bridge-scene" class="bridge-scene-3d"></div>
 <script>
     var bridgeScene = null;
     $(function() {
         bridgeScene = new bridge3d.BridgeScene({
-            $element: $("#bridgeSceneContainer1")
+            $element: $("#bridge-scene")
         });
         $(window).on("resize", function(e) {
             bridgeScene.invalidateSize();

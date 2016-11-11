@@ -15,6 +15,7 @@ export default class AnimatedScene3D extends Scene3D
             }
         }
         super.init(options);
+        this.$element.addClass("animated-scene3d");
         this.initControls();
     }
 
