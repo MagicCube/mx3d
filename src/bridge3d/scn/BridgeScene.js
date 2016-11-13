@@ -29,9 +29,9 @@ export default class BridgeScene3D extends StandardScene3D
     async _initBridge()
     {
         const $loading = $("");
-        this.bridge = new Bridge();
+        this.bridge = new Bridge({ scene: this });
         await this.bridge.load(e => {
-
+            // TODO Add loading indicator.
         });
         this.bridge.sensors.forEach(sensor => {
             this.clickableObjects.push(sensor.mesh);

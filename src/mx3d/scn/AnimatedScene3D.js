@@ -156,7 +156,7 @@ export default class AnimatedScene3D extends Scene3D
         });
     }
 
-    focusLine(vector1, vector2, overlookDegree = 0, duration = 1000, debug = false)
+    focusOnLine(vector1, vector2, overlookDegree = 0, duration = 1000, debug = false)
     {
         return new Promise(resolve => {
             let material = null;
@@ -191,8 +191,6 @@ export default class AnimatedScene3D extends Scene3D
 
             if (this.cameraControlsEnabled && this.cameraControls != null)
             {
-                this.cameraControlsEnabled = false;
-
                 new TWEEN.Tween(this.cameraControls.target).to(mVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
                 new TWEEN.Tween(this.camera.position).to(cVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).onUpdate(() =>
                 {
@@ -206,14 +204,13 @@ export default class AnimatedScene3D extends Scene3D
 
                 setTimeout(() =>
                 {
-                    this.cameraControlsEnabled = true;
                     resolve();
-                }, duration);
+                }, duration * 2);
             }
         });
     }
 
-    focusTriangle(vector1, vector2, vector3, overlookDegree = 0, duration = 1000, debug = false)
+    focusOnTriangle(vector1, vector2, vector3, overlookDegree = 0, duration = 1000, debug = false)
     {
         return new Promise(() => {
             let material = null;
@@ -232,7 +229,7 @@ export default class AnimatedScene3D extends Scene3D
             quaternion.setFromAxisAngle(axis, -Math.PI / 2);
             cVector.applyQuaternion(quaternion);
 
-            let angle = (90 - me.camera.fov / 2) * Math.PI / 180;
+            let angle = (90 - this.camera.fov / 2) * Math.PI / 180;
             let overlookAngle = overlookDegree * Math.PI / 180;
 
             let focusLength1 = vLength * 0.5 * Math.tan(angle);
@@ -258,8 +255,6 @@ export default class AnimatedScene3D extends Scene3D
 
             if (this.cameraControlsEnabled && this.cameraControls)
             {
-                this.cameraControlsEnabled = false;
-
                 new TWEEN.Tween(this.cameraControls.target).to(mVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
                 new TWEEN.Tween(this.camera.position).to(cVector, duration).easing(TWEEN.Easing.Sinusoidal.Out).onUpdate(() =>
                 {
@@ -273,7 +268,6 @@ export default class AnimatedScene3D extends Scene3D
 
                 setTimeout(() =>
                 {
-                    this.cameraControlsEnabled = true;
                     resolve();
                 }, duration);
             }
@@ -289,7 +283,7 @@ export default class AnimatedScene3D extends Scene3D
 
             if (!perspective)
             {
-                let params = me.cameraParams;
+                let params = this.cameraParams;
                 position = {
                     x : 0,
                     y : 0,

@@ -4,9 +4,17 @@ export default class Bridge extends Object3D
 {
     sensors = [];
 
+    selection = null;
+
     bridgeMaterial = new THREE.MeshPhongMaterial( { color: 0x9999aa, specular: 0x555555, shininess: 50 } );
     sensorMaterial = new THREE.MeshPhongMaterial( { color: 0xffbc78, specular: 0x555555, shininess: 100 } );
-    selectedSensorMaterial = new THREE.MeshPhongMaterial( { color: 0xff8112, specular: 0x555555, shininess: 100 } );
+    selectedSensorMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0x555555, shininess: 100 } );
+
+    constructor({ scene })
+    {
+        super();
+        this.scene = scene;
+    }
 
     async load(onProcess)
     {
@@ -99,18 +107,41 @@ export default class Bridge extends Object3D
         });
     }
 
-    selectSensor(key)
+    selectSensor(sensor)
     {
-        if (key === undefined || key === null)
+        if (sensor === undefined || sensor === null)
         {
             return;
         }
-        const sensor = this.getSensor(key);
-        if (!sensor)
+        sensor = this.getSensor(sensor);
+        if (!sensor || sensor === this.selection)
         {
             return;
         }
 
-        console.log(sensor);
+        if (this.selection)
+        {
+            this.selection.mesh.material = this.sensorMaterial;
+        }
+        this.selection = sensor;
+        sensor.mesh.material = this.selectedSensorMaterial;
+        this.focusOnSensor(sensor);
+    }
+
+    focusOnSensor(sensor)
+    {
+        if (sensor === undefined || sensor === null)
+        {
+            return;
+        }
+        sensor = this.getSensor(sensor);
+        const v1 = sensor.mesh.geometry.boundingSphere.center;
+        const v2 = new THREE.Vector3(v1.x + (sensor.under ? 30 : -30), v1.y, v1.z);
+        this.scene.focusOnLine(
+            v1,
+            v2,
+            (sensor.under ? 45 : -45),
+            2000
+        );
     }
 }
