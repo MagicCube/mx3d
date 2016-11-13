@@ -4,6 +4,11 @@ import Bridge from "../obj/Bridge";
 
 export default class BridgeScene3D extends StandardScene3D
 {
+    cameraControlsParams = {
+        minDistance: 10,
+    	maxDistance: 150
+    };
+
     init(options)
     {
         this.clickable = true;
@@ -43,13 +48,22 @@ export default class BridgeScene3D extends StandardScene3D
 
     _onobjectclick(e)
     {
+        if (e.button !== 0) return;
+
         const obj = e.objects[0];
         if (obj.name.startsWith("sensor_"))
         {
-            this.trigger("sensorclick", [{
+            this.trigger("sensorclick", [Object.assign(e, {
                 sensor: this.bridge.getSensor(obj)
-            }]);
-            this.bridge.selectSensor(obj);
+            })]);
+            if (e.altKey)
+            {
+                this.bridge.selectAndFocusOnSensor(obj);
+            }
+            else
+            {
+                this.bridge.selectSensor(obj);
+            }
         }
     }
 }

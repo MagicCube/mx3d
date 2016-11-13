@@ -255,7 +255,7 @@ export default class Scene3D extends EventEmitter
 
         let mouse = null;
 
-        if (e.type === "mouseup" && e.button === 0)
+        if (e.type === "mouseup")
         {
             // update the mouse variable
             mouse = {
@@ -300,10 +300,10 @@ export default class Scene3D extends EventEmitter
                 {
                     return intersect.object;
                 });
-                this.trigger("objectclick", [{
+                this.trigger("objectclick", [Object.assign(e, {
                     objects : objects,
                     intersects : intersects
-                }]);
+                })]);
             }
         }
     }

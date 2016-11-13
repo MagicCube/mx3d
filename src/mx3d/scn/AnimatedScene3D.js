@@ -3,6 +3,7 @@ import Scene3D from "./Scene3D";
 export default class AnimatedScene3D extends Scene3D
 {
     cameraControls = null;
+    cameraControlsParams = null;
     cameraControlsEnabled = true;
 
     init(options)
@@ -29,6 +30,10 @@ export default class AnimatedScene3D extends Scene3D
         if (this.cameraControlsEnabled && !this.cameraControls)
         {
             this.cameraControls = new THREE.TrackballControls(this.camera, this.$element.find("canvas")[0]);
+            if (this.cameraControlsParams)
+            {
+                Object.assign(this.cameraControls, this.cameraControlsParams);
+            }
         }
     }
 
