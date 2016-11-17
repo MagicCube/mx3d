@@ -6,7 +6,10 @@ export default class BridgeScene3D extends StandardScene3D
 {
     cameraControlsParams = {
         minDistance: 10,
-    	maxDistance: 150
+    	maxDistance: 150,
+        zoomSpeed: 0.2,
+        autoRotate: true,
+        autoRotateSpeed: 0.2
     };
 
     init(options)
@@ -22,12 +25,15 @@ export default class BridgeScene3D extends StandardScene3D
         this.$element.addClass("bridge-scene-3d");
 
         this.on("objectclick", this._onobjectclick.bind(this));
+        this.$element.on("mousedown touchstart", () => {
+            this.cameraControls.autoRotate = false;
+        });
     }
 
     initObjects()
     {
         super.initObjects();
-        this.showGrid(200, 40);
+        //this.showGrid(400, 20);
         this._initBridge();
     }
 
@@ -38,12 +44,36 @@ export default class BridgeScene3D extends StandardScene3D
         await this.bridge.load(e => {
             // TODO Add loading indicator.
         });
+        this.bridge.mesh.position.x = 14.3;
         this.bridge.sensors.forEach(sensor => {
             this.clickableObjects.push(sensor.mesh);
         });
         this.add(this.bridge);
         this.trigger("load");
+
+        this.resetCamera(2000);
     }
+
+    focusOnLine(...args)
+    {
+        super.focusOnLine(...args);
+        this.cameraControls.autoRotate = false;
+    }
+
+    resetCamera(duration = 2000)
+    {
+        if (this.cameraControls)
+        {
+            const position = {
+                "x":0,"y":80,"z":107.86556868012063
+            };
+            const rotation = {
+                _x: -0.63814462829258, y: 0, z: 0
+            };
+            return this.moveCamera(position, rotation, duration);
+       }
+       return Promise.reject();
+   }
 
 
     _onobjectclick(e)

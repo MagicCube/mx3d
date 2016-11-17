@@ -6,7 +6,7 @@ export default class Bridge extends Object3D
 
     selection = null;
 
-    bridgeMaterial = new THREE.MeshPhongMaterial( { color: 0x9999aa, specular: 0x555555, shininess: 20 } );
+    bridgeMaterial = new THREE.MeshPhongMaterial( { color: 0x9999aa, specular: 0x555555, shininess: 10 } );
     sensorMaterial = new THREE.MeshPhongMaterial( { color: 0xffbc78, specular: 0x555555, shininess: 100 } );
     selectedSensorMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0x555555, shininess: 100 } );
 

@@ -29,7 +29,10 @@ export default class AnimatedScene3D extends Scene3D
     {
         if (this.cameraControlsEnabled && !this.cameraControls)
         {
+            /*
             this.cameraControls = new THREE.TrackballControls(this.camera, this.$element.find("canvas")[0]);
+            */
+            this.cameraControls = new THREE.OrbitControls(this.camera, this.$element.find("canvas")[0]);
             if (this.cameraControlsParams)
             {
                 Object.assign(this.cameraControls, this.cameraControlsParams);
@@ -112,8 +115,6 @@ export default class AnimatedScene3D extends Scene3D
     moveCamera(position, rotation, duration = 1000, up)
     {
         return new Promise(resolve => {
-            this.cameraControlsEnabled = false;
-
             if (position)
             {
                 new TWEEN.Tween(this.camera.position).to(position, duration).easing(TWEEN.Easing.Sinusoidal.Out).start();
@@ -132,12 +133,6 @@ export default class AnimatedScene3D extends Scene3D
             {
                 this.cameraControls.reset();
             }
-
-            setTimeout(() =>
-            {
-                this.cameraControlsEnabled = true;
-                resolve();
-            }, duration);
         });
     }
 
@@ -146,16 +141,13 @@ export default class AnimatedScene3D extends Scene3D
         return new Promise(resolve => {
             if (position)
             {
-                this.cameraControlsEnabled = false;
                 new TWEEN.Tween(this.cameraControls.target).to(position, duration).easing(TWEEN.Easing.Sinusoidal.Out).onComplete(() =>
                 {
-                    this.cameraControlsEnabled = true;
                     resolve();
                 }).start();
             }
             else
             {
-                this.cameraControlsEnabled = true;
                 resolve();
             }
         });
@@ -326,5 +318,5 @@ export default class AnimatedScene3D extends Scene3D
            return this.moveCamera(position, rotation, duration);
        }
        return Promise.reject();
-   };
+   }
 }
