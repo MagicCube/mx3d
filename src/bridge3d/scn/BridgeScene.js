@@ -21,6 +21,11 @@ export default class BridgeScene3D extends StandardScene3D
             position: { z: 100 }
         };
 
+        if (options.bridgeModelUrl)
+        {
+            this.bridgeModelUrl = options.bridgeModelUrl;
+        }
+
         super.init(options);
         this.$element.addClass("bridge-scene-3d");
 
@@ -41,7 +46,7 @@ export default class BridgeScene3D extends StandardScene3D
     {
         const $loading = $("");
         this.bridge = new Bridge({ scene: this });
-        await this.bridge.load(e => {
+        await this.bridge.load(this.bridgeModelUrl, e => {
             // TODO Add loading indicator.
         });
         this.bridge.mesh.position.x = 14.3;
@@ -86,14 +91,7 @@ export default class BridgeScene3D extends StandardScene3D
             this.trigger("sensorclick", [Object.assign(e, {
                 sensor: this.bridge.getSensor(obj)
             })]);
-            if (e.altKey)
-            {
-                this.bridge.selectAndFocusOnSensor(obj);
-            }
-            else
-            {
-                this.bridge.selectSensor(obj);
-            }
+            this.bridge.selectSensor(obj);
         }
     }
 }

@@ -16,10 +16,10 @@ export default class Bridge extends Object3D
         this.scene = scene;
     }
 
-    async load(onProcess)
+    async load(url, onProcess)
     {
         console.log("[bridge3d] Loading bridge.obj...");
-        this.mesh = await this.loadFromObj("../models/bridge.obj", onProcess);
+        this.mesh = await this.loadFromObj(url, onProcess);
         console.log("[bridge3d] bridge.obj is now successfully loaded.");
         this._loadSensors();
     }
