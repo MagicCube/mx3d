@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bridge 3D</title>
+    <link rel="stylesheet" href="../assets/res/bridge3d.css">
+    <script src="../lib/jquery.js"></script>
+    <script src="../assets/bridge3d.js" charset="utf-8"></script>
+    <style>
+    html, body
+    {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+</head>
+<body>
+
+<div id="bridge-scene" class="bridge-scene-3d"></div>
+<script>
+    var bridgeScene = null;
+    $(function() {
+        bridgeScene = new bridge3d.BridgeScene({
+            $element: $("#bridge-scene"),
+            bridgeModelUrl: "models/bridge.obj"
+        });
+        bridgeScene.startAnimation();
+
+        // <<<注意>>>：所有对桥梁 bridge 的操作都必须在 load 事件之后。
+        bridgeScene.on("load", function(e) {
+            // 只显示所有应变传感器，应变传感器的 ID 事先从
+            // 数据库中读出。
+            bridgeScene.bridge.showSensors(["0402", "0401", "0403", "0404", "0405", "0406", "0407", "0408", "0409", "0410", "0416", "0414", "0412", "0417", "0418", "0419", "0420", "0421", "0422", "0423", "0424", "0425", "0426", "0432", "0430", "0428", "0411", "0413", "0415", "0431", "0429", "0427"]);
+        });
+
+        bridgeScene.on("sensorclick", function(e) {
+            console.log(e.sensor);
+            // bridgeScene.bridge.selectSensor(e.sensor);
+            bridgeScene.bridge.focusOnSensor(e.sensor);
+        });
+
+        $(window).on("resize", function(e) {
+            bridgeScene.invalidateSize();
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -6,26 +6,19 @@ const webpack = require("webpack");
 
 module.exports = {
     context: path.resolve("./src"),
-    entry: {
-        "vendor": [ "jquery", "tween.js" ],
-        "three": [
-            "three",
-            "./THREE/effects/AnaglyphEffect",
-            "./THREE/controls/TrackballControls",
-            "./THREE/loaders/OBJLoader"
-        ],
-        "bridge": [ "./examples/bridge/index.js", "./examples/bridge/res/index.less" ]
-    },
+    entry: [ "babel-polyfill", "./index.js" ],
     resolve: {
         alias: {
             "mx3d": path.resolve("./src/mx3d"),
+            "bridge3d": path.resolve("./src/bridge3d"),
             "normalize.css": path.resolve("./node_modules/normalize.css/normalize.css")
         }
     },
     output: {
         path: path.resolve("./public/assets"),
         publicPath: "/assets/",
-        filename: "[name]/index.js"
+        filename: "bridge3d.js",
+        library: "bridge3d"
     },
     devServer: {
         contentBase: path.resolve("./public")
@@ -50,17 +43,10 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin("./[name]/res/index.css"),
+        new ExtractTextPlugin("./res/bridge3d.css"),
         new webpack.ProvidePlugin({
-            "$": "jquery",
-            "jQuery": "jquery",
             "THREE": "three",
             "TWEEN": "tween.js"
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            filename: "vendor.js",
-            minChunks: Infinity
-        }),
+        })
     ]
 };
