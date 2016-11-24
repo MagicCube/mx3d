@@ -263,8 +263,8 @@ export default class Scene3D extends EventEmitter
                 y : 0,
                 z : 0
             };
-            mouse.x = (e.clientX / this.frame.width) * 2 - 1;
-            mouse.y = -(e.clientY / this.frame.height) * 2 + 1;
+            mouse.x = (e.offsetX / this.frame.width) * 2 - 1;
+            mouse.y = -(e.offsetY / this.frame.height) * 2 + 1;
             mouse.z = 1;
         }
         else if (e.type === "touchstart")
@@ -274,8 +274,8 @@ export default class Scene3D extends EventEmitter
                 y : 0,
                 z : 0
             };
-            mouse.x = (e.touches[0].clientX / this.frame.width) * 2 - 1;
-            mouse.y = -(e.touches[0].clientY / this.frame.height) * 2 + 1;
+            mouse.x = (e.touches[0].offsetX / this.frame.width) * 2 - 1;
+            mouse.y = -(e.touches[0].offsetY / this.frame.height) * 2 + 1;
             mouse.z = 1;
         }
 
