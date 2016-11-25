@@ -143,6 +143,13 @@ export default class Bridge extends Object3D
             return;
         }
         sensor = this.getSensor(sensor);
+        if (!sensor.mesh.geometry.boundingSphere)
+        {
+            setTimeout(() => {
+                this.focusOnSensor(sensor);
+            }, 100);
+            return;
+        }
         const v1 = sensor.mesh.geometry.boundingSphere.center;
         const v2 = new THREE.Vector3(v1.x + (sensor.under ? 30 : -30), v1.y, v1.z);
         this.scene.focusOnLine(
