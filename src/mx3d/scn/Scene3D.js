@@ -61,7 +61,7 @@ export default class Scene3D extends EventEmitter
     initCamera()
     {
         const params = Object.assign({
-            fov : 45,
+            fov : 12,
             aspect : this.frame.width / this.frame.height,
             near : 0.01,
             far : 10000
@@ -300,10 +300,9 @@ export default class Scene3D extends EventEmitter
                 {
                     return intersect.object;
                 });
-                this.trigger("objectclick", [Object.assign(e, {
-                    objects : objects,
-                    intersects : intersects
-                })]);
+                e.objects = objects;
+                e.intersects = intersects;
+                this.trigger("objectclick", [ e ]);
             }
         }
     }

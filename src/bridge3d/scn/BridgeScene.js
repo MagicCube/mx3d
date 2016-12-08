@@ -5,10 +5,10 @@ import Bridge from "../obj/Bridge";
 export default class BridgeScene3D extends StandardScene3D
 {
     cameraControlsParams = {
-        minDistance: 10,
-    	maxDistance: 150,
+        //minDistance: 10,
+    	//maxDistance: 150,
         zoomSpeed: 0.2,
-        autoRotate: true,
+        //autoRotate: true,
         autoRotateSpeed: 0.2
     };
 
@@ -17,9 +17,6 @@ export default class BridgeScene3D extends StandardScene3D
         this.clickable = true;
         this.backgroundColor = 0x213857;
         this.anaglyphEffectEnabled = false;
-        this.cameraParams = {
-            position: { z: 100 }
-        };
 
         if (options.bridgeModelUrl)
         {
@@ -44,7 +41,6 @@ export default class BridgeScene3D extends StandardScene3D
 
     async _initBridge()
     {
-        const $loading = $("");
         this.bridge = new Bridge({ scene: this });
         await this.bridge.load(this.bridgeModelUrl, e => {
             // TODO Add loading indicator.
@@ -56,7 +52,7 @@ export default class BridgeScene3D extends StandardScene3D
         this.add(this.bridge);
         this.trigger("load");
 
-        this.resetCamera(2000);
+        this.resetCamera(0);
     }
 
     focusOnLine(...args)
@@ -69,11 +65,9 @@ export default class BridgeScene3D extends StandardScene3D
     {
         if (this.cameraControls)
         {
-            const position = {
-                "x":0,"y":80,"z":107.86556868012063
-            };
+            const position = {x: 67.02135539344368, y: 77.83638326413819, z: 188.04896351634508};
             const rotation = {
-                _x: -0.63814462829258, y: 0, z: 0
+                x: -0.7527655018998052, y: 0.610207998509874, z: 0.24696213819957952
             };
             return this.moveCamera(position, rotation, duration);
        }
@@ -88,10 +82,8 @@ export default class BridgeScene3D extends StandardScene3D
         const obj = e.objects[0];
         if (obj.name.startsWith("sensor_"))
         {
-            this.trigger("sensorclick", [Object.assign(e, {
-                sensor: this.bridge.getSensor(obj)
-            })]);
-            this.bridge.selectSensor(obj);
+            e.sensor = this.bridge.getSensor(obj);
+            this.trigger("sensorclick", [e]);
         }
     }
 }

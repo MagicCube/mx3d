@@ -6,8 +6,8 @@ export default class Bridge extends Object3D
 
     selection = null;
 
-    bridgeMaterial = new THREE.MeshPhongMaterial( { color: 0x9999aa, specular: 0x555555, shininess: 10 } );
-    sensorMaterial = new THREE.MeshPhongMaterial( { color: 0xffbc78, specular: 0x555555, shininess: 100 } );
+    bridgeMaterial = new THREE.MeshPhongMaterial( { color: 0xbee0fc, specular: 0x555555, shininess: 10 } );
+    sensorMaterial = new THREE.MeshPhongMaterial( { color: 0x00c09e, specular: 0x555555, shininess: 100 } );
     selectedSensorMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0x555555, shininess: 100 } );
 
     constructor({ scene })
@@ -20,6 +20,8 @@ export default class Bridge extends Object3D
     {
         console.log("[bridge3d] Loading bridge.obj...");
         this.mesh = await this.loadFromObj(url, onProcess);
+        this.mesh.position.z -= 10;
+        this.mesh.position.y -= 7;
         console.log("[bridge3d] bridge.obj is now successfully loaded.");
         this._loadSensors();
     }
@@ -150,13 +152,19 @@ export default class Bridge extends Object3D
             }, 100);
             return;
         }
-        const v1 = sensor.mesh.geometry.boundingSphere.center;
-        const v2 = new THREE.Vector3(v1.x + (sensor.under ? 30 : -30), v1.y, v1.z);
+        sensor.mesh.geometry.computeBoundingBox();
+
+        const v1 = sensor.mesh.geometry.boundingBox.min.clone();
+        v1.x += this.mesh.position.x + (sensor.under ? -7 : 10);
+        v1.y += this.mesh.position.y;
+        v1.z += this.mesh.position.z;
+        const v2 = new THREE.Vector3(v1.x + (sensor.under ? 15 : -20), v1.y, v1.z + (sensor.under ? 12 : -12));
         this.scene.focusOnLine(
             v1,
             v2,
-            (sensor.under ? 45 : -45),
-            2000
+            (sensor.under ? 50 : -45),
+            2000,
+            false
         );
     }
 }
